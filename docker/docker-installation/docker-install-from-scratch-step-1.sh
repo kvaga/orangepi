@@ -1,5 +1,5 @@
 #/bin/bash
-source ../lib.sh
+source ../../lib.sh
 log "Remove old docker installations"
 sudo apt remove -y docker docker-engine docker.io containerd runc
 

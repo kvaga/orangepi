@@ -1,5 +1,5 @@
 #!/bin/bash
-source ../lib.sh
+source ../../lib.sh
 log "Create docker service"
 sudo systemctl enable docker.service
 log "Get status of docker service"
