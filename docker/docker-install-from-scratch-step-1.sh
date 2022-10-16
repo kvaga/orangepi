@@ -1,8 +1,9 @@
 #/bin/bash
-echo "Remove old docker installations"
+source ../lib.sh
+log "Remove old docker installations"
 sudo apt remove -y docker docker-engine docker.io containerd runc
 
-echo "Installation of certs, curl, gnupg, lsb-release"
+log "Installation of certs, curl, gnupg, lsb-release, docker..."
 sudo apt update &&
 sudo apt-get install -y ca-certificates curl gnupg lsb-release
 
@@ -13,9 +14,9 @@ https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" | sudo tee /
 sudo apt-get update 
 sudo apt-get install -y docker-ce docker-ce-cli containerd.io
 
-echo Note: If an error is reported after Debian Buster is installed, please enter thefollowing command to solve it:
-echo ---: orangepi@orangepi:~$ echo 1 | update-alternatives --config iptables > /dev/null
-echo ---: orangepi@orangepi:~$ sudo systemctl restart docker
-echo Add user to 'docker' group
+log_warn "Note: If an error is reported after Debian Buster is installed, please enter thefollowing command to solve it:"
+log_warn ---: orangepi@orangepi:~$ echo 1 | update-alternatives --config iptables > /dev/null
+log_warn ---: orangepi@orangepi:~$ sudo systemctl restart docker
+log "Add user to 'docker' group"
 sudo usermod -aG docker $USER
-echo Exit. Please relogin again and start from 
+log "Exit. Please relogin again and start from 2nd step"

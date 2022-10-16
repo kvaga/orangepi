@@ -1,5 +1,9 @@
 #!/bin/bash
-echo Get status of docker service
+source ../lib.sh
+log "Create docker service"
+sudo systemctl enable docker.service
+log "Get status of docker service"
 systemctl status docker
-echo Test of docker installation
+log "Test of docker installation"
 docker run hello-world
+
