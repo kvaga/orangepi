@@ -2,8 +2,6 @@
 version: "2.1"
 services:
   transmission:
-    env_file:
-      - /data2/docker_application_configurations/transmission/transmission.env
     image: lscr.io/linuxserver/transmission:latest
     container_name: transmission
     environment:
