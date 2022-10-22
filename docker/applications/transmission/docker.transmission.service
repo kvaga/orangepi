@@ -1,0 +1,12 @@
+[Unit]
+Description=Transmission Docker Service
+PartOf=docker.service
+After=docker.service
+
+[Service]
+Restart=always
+ExecStart=/usr/bin/docker-compose --env-file=/data2/docker_application_configurations/transmission/transmission.env up -d
+ExecStop=/usr/bin/docker-compose --env-file=/data2/docker_application_configurations/transmission/transmission.env down
+
+[Install]
+WantedBy=multi-user.target
