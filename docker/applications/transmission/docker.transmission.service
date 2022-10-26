@@ -1,11 +1,17 @@
 [Unit]
 Description=Transmission Docker Service
-PartOf=docker.service
+Requires=docker.service
 After=docker.service
 
 [Service]
 Restart=always
-ExecStart=/usr/bin/docker-compose --env-file=/data2/docker_application_configurations/transmission/transmission.env up -d
+WorkingDirectory=/home/docker/git-repos/orangepi/docker/applications/transmission
+#RestartSec=15
+#ExecStartPre=/usr/bin/docker-compose -f docker/docker-compose.yaml down -v
+#ExecStartPre=-/bin/bash -c 'docker network rm docker_jfrog_net'
+#ExecStartPre=-/bin/bash -c 'docker ps -aqf "name=artifactory" | xargs docker rm'
+
+ExecStart=/usr/bin/docker-compose --env-file=/data2/docker_application_configurations/transmission/transmission.env up
 ExecStop=/usr/bin/docker-compose --env-file=/data2/docker_application_configurations/transmission/transmission.env down
 
 [Install]
