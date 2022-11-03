@@ -3,10 +3,15 @@ web:
   volumes:
    #- ./templates:/etc/nginx/templates
    #- ./conf/nginx.conf:/etc/nginx/nginx.conf
-   - ./certificates/:/etc/nginx/certificates/
-   - ./sites-available:/etc/nginx/sites-available/proxy.conf
+   - ./CertificateAuthCA/:/etc/nginx/certificates/
+   - ./nginx-custom-config/:/nginx-custom-config/
+   - ./nginx.conf:/etc/nginx/nginx.conf
+   #- ./sites-enabled:/etc/nginx/sites-enabled/
+   #- ./sites-enabled:/etc/nginx/sites-available/
   ports:
    - "8080:80"
+   - "8443:443"
   environment:
    - NGINX_HOST=foobar.com
    - NGINX_PORT=80
+

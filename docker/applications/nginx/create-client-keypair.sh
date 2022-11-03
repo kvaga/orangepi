@@ -44,3 +44,10 @@ fi
 
 log "Files $client_name.crt, $client_name.key and $client_name.pfx were be saved to ."
 
+log "Removing password phrase from $client_name.key file..."
+
+if openssl rsa -in $client_name.key -out $client_name.key.nopass; then
+	log "Password phrase removed from $client_name.key file"
+else
+	log_error "Couldn't remove password phrase from the $client_name.key file"
+fi"
