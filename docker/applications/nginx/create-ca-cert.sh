@@ -2,11 +2,16 @@
 source ../../../lib.sh
 source init.sh
 
+log "Removing old CA certificate..."
+rm $ca_cert_key
+rm $ca_cert_crt
+
 #log "Creating CA certificate. Please specify cert name..."
 #read -p "CA name> " cert_name
 ## You will be prompted to set a passphrase. Make sure to set it to something you’ll remember.
-#openssl req -new -newkey rsa:1024 -nodes -keyout ca.key -x509 -days 500 -subj /C=RU/ST=Moscow/L=Moscow/O=Companyname/OU=User/CN=etc/emailAddress=support@site.com -out ca.crt
-if openssl req -new -newkey rsa:1024 -nodes -keyout $ca_cert_key -x509 -days 500 \
+#openssl req -new -newkey $key_type -nodes -keyout ca.key -x509 -days 500 -subj /C=RU/ST=Moscow/L=Moscow/O=Companyname/OU=User/CN=etc/emailAddress=support@site.com -out ca.crt
+log "Creating CA certificates $ca_cert_key, $ca_cert_crt"
+if openssl req -new -newkey $key_type -nodes -keyout $ca_cert_key -x509 -days 500 \
 	-subj /C=RU/ST=Moscow/L=Moscow/O=Companyname/OU=User/CN=etc/emailAddress=support@site.com \
 	-out $ca_cert_crt; then 
 	log "Files $ca_cert_key, $ca_cert_crt were created";

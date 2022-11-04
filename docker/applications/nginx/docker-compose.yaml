@@ -3,7 +3,7 @@ web:
   volumes:
    #- ./templates:/etc/nginx/templates
    #- ./conf/nginx.conf:/etc/nginx/nginx.conf
-   - ./CertificateAuthCA/:/etc/nginx/certificates/
+   - ./CertificateAuthCA/db:/etc/nginx/certificates/
    - ./nginx-custom-config/:/nginx-custom-config/
    - ./nginx.conf:/etc/nginx/nginx.conf
    #- ./sites-enabled:/etc/nginx/sites-enabled/

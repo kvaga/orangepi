@@ -4,42 +4,65 @@ source init.sh
 
 log "Creating client's keypair. Please specify client name WITHOUT extension: " 
 read -p "Client name> " client_name
-client_cert_key=$directory/$client_name.key
-client_cert_csr=$directory/$client_name.csr
-client_cert_crt=$directory/$client_name.p12
+client_cert_key=$client_cert_path/$client_name.key
+client_cert_csr=$client_cert_path/$client_name.csr
+client_cert_crt=$client_cert_path/$client_name.crt
+client_cert_p12=$client_cert_path/$client_name.p12
+
+log "Clear old certificates if exist"
+rm $client_cert_key
+rm $client_cert_csr
+rm $client_cert_crt
+rm $client_cert_p12
+
+log "Check if doesn't exist file $index_file"
+if [ ! -f "$index_file" ];
+then 
+	log_warn "File $index_file doesn't exist"
+	touch $index_file && echo "01" > $serial_file
+	log "Files $index_file, $serial_file created"
+else
+	log "File $index_file exists"
+fi
 
 #echo 
 #log "Please specife CA name file WITHOUT extendsion"
 #ls -la 
 #read -p "CA> " ca_name
-log "The [$client_cert_csr, $client_crt_key and $client_cert_crt] files will be saved to $directory"
+log "The [$client_cert_csr, $client_cert_key and $client_cert_crt] files will be saved to $directory"
 
-
+log "Read serial number from the file $serial_file"
+num_serial=$(cat $serial_file)
+log "Current serial number: "$num_serial
+num_serial=`expr $num_serial + 1`
+num_serail="0$num_serial"
+log "Next serial num: "$num_serial
 ## You will be prompted for a passphrase which will be distributed to your user with the certificate. Do NOT ever distribute the passphrase set above for your root CA’s private key. Make sure you understand this distinction!
 log "Creating $client_cert_key and $client_cert_csr..."
 #if openssl genrsa -des3 -out $client_name.key 2048; then
-if openssl req -new -newkey rsa:1024 -nodes -keyout $client_cert_key \
-	-subj /C=RU/ST=Moscow/L=Moscow/O=Companyname/OU=User/CN=etc/emailAddress=support@site.com \
-	-out $client_cert_csr; then	
-	log "Files [$client_cert_key, $client_cert_csr] were created"
+if openssl req -new -newkey $key_type -nodes -keyout $client_cert_key -set_serial "0x`openssl rand -hex 8`" \
+	-subj /C=RU/ST=Moscow/L=Moscow/O=Companyname/OU=User/CN=$client_name/emailAddress=support@site.com \
+	-out $client_cert_csr; then
+	#echo "0$num_serial" > $serial_file
+	log "Files [$client_cert_key, $client_cert_csr] were created. Newly created erial num $num_serial saved to $serial_file file"
 else
 	log_error "Couldn't create files $client_cert_key, $client_cert_csr"
 	exit 0
 fi
 
 log "Signing file $client_cert_csr..."
-if openssl ca -config ca.config -in $client_cert_csr -out $client_cert_csr -batch;
-then log "File $client_cert_csr signed. Result file is: $client_cert_csr";
+if openssl ca -config ca.config -in $client_cert_csr -out $client_cert_crt -batch;
+then log "File $client_cert_csr signed. Result file is: $client_cert_crt";
 else 
 	log_error "Couldn't sign the file $client_cert_csr"
 	exit 0
 fi
 
 log "Creating certificate for browsers..."
-if openssl pkcs12 -export -in $client_cert_csr -inkey $client_cert_key -certfile $ca_cert_crt -out $client_cert_crt;
-then log "Created file $client_cert_crt";
+if openssl pkcs12 -export -in $client_cert_crt -inkey $client_cert_key -certfile $ca_cert_crt -out $client_cert_p12;
+then log "Created file $client_cert_p12";
 else 
-	log_error "Couldn't create file $client_cert_crt";
+	log_error "Couldn't create file $client_cert_p12";
 	exit 0
 fi
 #log "Creating file $client_name.csr..."

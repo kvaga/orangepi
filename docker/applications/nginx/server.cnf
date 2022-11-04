@@ -8,8 +8,8 @@ CN = Сервер с аутентификацией клиентов
 emailAddress = kvagalex@example.com
 O = Private person
 OU = Alter ego dept
-L = Korolyov
+L = Kov
 C = RU
 
 [ext]
-subjectAltName = DNS:example.com,DNS:*.example.com,IP:127.0.0.1
+subjectAltName = DNS:example.com,DNS:*.example.com,IP:127.0.0.1,IP:192.168.1.11

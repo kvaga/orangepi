@@ -1,2 +1,8 @@
 .env
 docker/applications/nginx/CertificateAuthCA
+*.csr
+*.p12
+*.csr
+*.crt
+*.key
+
